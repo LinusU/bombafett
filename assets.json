@@ -40,6 +40,16 @@
     },
 
     {
+      "id": "powerup",
+      "path": "assets/powerup.png",
+      "frames": [
+        [  0, 0, 32, 32 ],
+        [ 32, 0, 32, 32 ],
+        [ 64, 0, 32, 32 ]
+      ]
+    },
+
+    {
       "id": "grobb",
       "path": "assets/grobb.png",
       "frames": [

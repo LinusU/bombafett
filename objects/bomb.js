@@ -25,6 +25,7 @@ class Bomb extends Actor {
 
     other = this.createInstance('explosion', 0, 0, true)
     other.explosionType = 'initial'
+    other.power = this.power
   }
 }
 

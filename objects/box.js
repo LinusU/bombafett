@@ -7,6 +7,12 @@ class Box extends Actor {
     this.setSpriteFromName('box')
     this.solid = true
   }
+
+  destroy () {
+    if (Math.random() < .2) {
+      this.createInstance('powerup', 0, 0, true)
+    }
+  }
 }
 
 module.exports = Box

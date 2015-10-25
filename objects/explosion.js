@@ -22,10 +22,14 @@ class Explosion extends Actor {
 
       switch (this.explosionType) {
         case 'origin': this.frameIndex = 2; break
-        case 'right': this.frameIndex = 3; break
-        case 'left': this.frameIndex = 0; break
-        case 'down': this.frameIndex = 6; break
-        case 'up': this.frameIndex = 4; break
+        case 'right': this.frameIndex = 1; break
+        case 'left': this.frameIndex = 1; break
+        case 'down': this.frameIndex = 5; break
+        case 'up': this.frameIndex = 5; break
+        case 'right-end': this.frameIndex = 3; break
+        case 'left-end': this.frameIndex = 0; break
+        case 'down-end': this.frameIndex = 6; break
+        case 'up-end': this.frameIndex = 4; break
       }
     }
 
@@ -36,47 +40,41 @@ class Explosion extends Actor {
 
   destroy () {
     let other, box, player
-    const { x, y } = this
+    const { x, y, power } = this
 
     if (this.explosionType === 'initial') {
       other = this.createInstance('explosion', 0, 0, true)
       other.explosionType = 'origin'
 
-      box = this.collisionRectangle(x + 32, y, x + 64, y + 32, 'box', false, true)
-      if (box) box.destroyInstance()
-      player = this.collisionRectangle(x + 32, y, x + 64, y + 32, 'player', false, true)
-      if (player) player.destroyInstance()
-      if (this.checkEmpty(32, 0, true, true)) {
-        other = this.createInstance('explosion', 32, 0, true)
-        other.explosionType = 'right'
+      const addExpl = (dx, dy, explosionType, power) => {
+        other = this.collisionRectangle(x + dx, y + dy, x + dx + 32, y + dy + 32, 'box', false, true)
+        if (other) {
+          other.destroyInstance()
+          power = 0
+        }
+
+        other = this.collisionRectangle(x + dx, y + dy, x + dx + 32, y + dy + 32, 'player', false, true)
+        if (other) {
+          other.destroyInstance()
+          power = 0
+        }
+
+        if (this.checkEmpty(dx, dy, true, true)) {
+          other = this.createInstance('explosion', dx, dy, true)
+          other.explosionType = explosionType
+
+          if (power > 0) {
+            addExpl(dx + Math.sign(dx) * 32, dy + Math.sign(dy) * 32, explosionType, power - 1)
+          } else {
+            other.explosionType += '-end'
+          }
+        }
       }
 
-      box = this.collisionRectangle(x - 32, y, x, y + 32, 'box', false, true)
-      if (box) box.destroyInstance()
-      player = this.collisionRectangle(x - 32, y, x, y + 32, 'player', false, true)
-      if (player) player.destroyInstance()
-      if (this.checkEmpty(-32, 0, true, true)) {
-        other = this.createInstance('explosion', -32, 0, true)
-        other.explosionType = 'left'
-      }
-
-      box = this.collisionRectangle(x, y + 32, x + 32, y + 64, 'box', false, true)
-      if (box) box.destroyInstance()
-      player = this.collisionRectangle(x, y + 32, x + 32, y + 64, 'player', false, true)
-      if (player) player.destroyInstance()
-      if (this.checkEmpty(0, 32, true, true)) {
-        other = this.createInstance('explosion', 0, 32, true)
-        other.explosionType = 'down'
-      }
-
-      box = this.collisionRectangle(x, y - 32, x + 32, y, 'box', false, true)
-      if (box) box.destroyInstance()
-      player = this.collisionRectangle(x, y - 32, x + 32, y, 'player', false, true)
-      if (player) player.destroyInstance()
-      if (this.checkEmpty(0, -32, true, true)) {
-        other = this.createInstance('explosion', 0, -32, true)
-        other.explosionType = 'up'
-      }
+      addExpl(32, 0, 'right', power - 1)
+      addExpl(-32, 0, 'left', power - 1)
+      addExpl(0, 32, 'down', power - 1)
+      addExpl(0, -32, 'up', power - 1)
     }
   }
 }
