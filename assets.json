@@ -138,7 +138,7 @@
     }
   ],
   "backgrounds": [
-    { "id": "ground", "path": "assets/sprites/ground.png" }
+    { "id": "ground", "path": "assets/ground.png" }
   ],
   "sounds": []
 }
