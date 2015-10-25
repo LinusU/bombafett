@@ -1,0 +1,9 @@
+{
+  "name": "main",
+  "width": 480,
+  "height": 480,
+  "background": "ground",
+  "instances": [
+    { "type": "controller", "x": -32, "y": -32 }
+  ]
+}
