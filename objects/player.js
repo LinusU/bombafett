@@ -1,6 +1,12 @@
 'use strict'
 
-const Actor = require('gamox').Actor
+const { Actor, Gamepad } = require('gamox')
+
+const NES_X = 3
+const NES_Y = 4
+
+const NES_A = 1
+const NES_B = 2
 
 const RIGHT = 0
 const LEFT = 1
@@ -9,11 +15,6 @@ const UP = 3
 
 const COOLDOWN = 90
 const SPRITES = ['grobb', 'gropp', 'groameesh', 'george']
-const KEYS = [
-  [ 262, 263, 264, 265, 46 ],
-  [ 68, 65, 83, 87, 88 ]
-]
-
 const ANIM = {
   stand: [[0], [1], [2], [3]],
   walk: [[4, 5, 6], [7, 8, 9], [10, 11], [12, 13]]
@@ -25,8 +26,10 @@ class Player extends Actor {
   create () {
     this.solid = false
 
-    this.playerId = playerCount++
-    this.setSpriteFromName(SPRITES[this.playerId])
+    const playerId = playerCount++
+
+    this.gamepad = new Gamepad(playerId)
+    this.setSpriteFromName(SPRITES[playerId])
     this.animationSpeed = 0
 
     this.animCounter = 0
@@ -42,7 +45,7 @@ class Player extends Actor {
 
   step () {
     let other
-    const keys = KEYS[this.playerId]
+    const { axes, buttons } = this.gamepad.update()
 
     if (this.curMana < this.maxMana) {
       this.curMana += 1
@@ -50,7 +53,7 @@ class Player extends Actor {
 
     let isMoving = false
 
-    if (this.checkKeyboard(keys[0])) {
+    if (axes[NES_X] > .5) {
       this.walkDirection = RIGHT
       if (this.checkEmpty(this.walkSpeed, 0, true, true)) {
         this.x += this.walkSpeed
@@ -58,7 +61,7 @@ class Player extends Actor {
       }
     }
 
-    if (this.checkKeyboard(keys[1])) {
+    if (axes[NES_X] < -.5) {
       this.walkDirection = LEFT
       if (this.checkEmpty(-this.walkSpeed, 0, true, true)) {
         this.x -= this.walkSpeed
@@ -66,7 +69,7 @@ class Player extends Actor {
       }
     }
 
-    if (this.checkKeyboard(keys[2])) {
+    if (axes[NES_Y] > .5) {
       this.walkDirection = DOWN
       if (this.checkEmpty(0, this.walkSpeed, true, true)) {
         this.y += this.walkSpeed
@@ -74,7 +77,7 @@ class Player extends Actor {
       }
     }
 
-    if (this.checkKeyboard(keys[3])) {
+    if (axes[NES_Y] < -.5) {
       this.walkDirection = UP
       if (this.checkEmpty(0, -this.walkSpeed, true, true)) {
         this.y -= this.walkSpeed
@@ -82,7 +85,7 @@ class Player extends Actor {
       }
     }
 
-    if (this.checkKeyboard(keys[4])) {
+    if (buttons[NES_A]) {
       if (this.curMana >= COOLDOWN) {
         if (this.checkEmpty(0, 0, true, false)) {
           this.curMana -= COOLDOWN
