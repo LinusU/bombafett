@@ -6,7 +6,7 @@ class Bomb extends Actor {
   create () {
     this.setSpriteFromName('bomb')
     this.animationSpeed = 0.05
-    this.solid = false // FIXME
+    this.solid = true // FIXME
 
     this.x = Math.round(this.x / 32) * 32
     this.y = Math.round(this.y / 32) * 32

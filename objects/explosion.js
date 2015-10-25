@@ -53,11 +53,6 @@ class Explosion extends Actor {
           power = 0
         }
 
-        other = this.collisionRectangle(x + dx, y + dy, x + dx + 32, y + dy + 32, 'player', false, true)
-        if (other) {
-          other.destroyInstance()
-        }
-
         if (this.checkEmpty(dx, dy, true, true)) {
           other = this.createInstance('explosion', dx, dy, true)
           other.explosionType = explosionType

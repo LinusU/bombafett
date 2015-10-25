@@ -12,12 +12,14 @@ const RIGHT = 0
 const LEFT = 1
 const DOWN = 2
 const UP = 3
+const IDLE = 4
 
 const COOLDOWN = 90
 const SPRITES = ['grobb', 'gropp', 'groameesh', 'george']
 const ANIM = {
   stand: [[0], [1], [2], [3]],
-  walk: [[4, 5, 6], [7, 8, 9], [10, 11], [12, 13]]
+  walk: [[4, 5, 6], [7, 8, 9], [10, 11], [12, 13]],
+  dead: 14
 }
 
 let playerCount = 0
@@ -34,55 +36,70 @@ class Player extends Actor {
 
     this.animCounter = 0
 
-    this.bombPower = 2
+    this.bombPower = 1
     this.walkSpeed = 2
 
     this.maxMana = COOLDOWN
     this.curMana = COOLDOWN
 
+    this.alive = true
+    this.action = IDLE
     this.walkDirection = DOWN
+
+    this.target = [this.x, this.y]
   }
 
   step () {
+    if (!this.alive) return
+
     let other
+
+    let { action } = this
     const { axes, buttons } = this.gamepad.update()
 
     if (this.curMana < this.maxMana) {
       this.curMana += 1
     }
 
-    let isMoving = false
+    if (action === IDLE) {
+      let delta
 
-    if (axes[NES_X] > .5) {
-      this.walkDirection = RIGHT
-      if (this.checkEmpty(this.walkSpeed, 0, true, true)) {
-        this.x += this.walkSpeed
-        isMoving = true
+      if (axes[NES_X] > .5) action = RIGHT, delta = [32, 0]
+      if (axes[NES_X] < -.5) action = LEFT, delta = [-32, 0]
+      if (axes[NES_Y] > .5) action = DOWN, delta = [0, 32]
+      if (axes[NES_Y] < -.5) action = UP, delta = [0, -32]
+
+      if (action !== IDLE) {
+        if (!this.checkEmpty(delta[0], delta[1], true, true)) {
+          action = IDLE
+        } else {
+          this.target = [this.x + delta[0], this.y + delta[1]]
+        }
       }
     }
 
-    if (axes[NES_X] < -.5) {
-      this.walkDirection = LEFT
-      if (this.checkEmpty(-this.walkSpeed, 0, true, true)) {
-        this.x -= this.walkSpeed
-        isMoving = true
+    if (Math.abs(this.x - this.target[0]) + Math.abs(this.y - this.target[1]) < this.walkSpeed) {
+      this.x = this.target[0]
+      this.y = this.target[1]
+      action = IDLE
+    } else {
+      switch (action) {
+        case RIGHT: this.x += this.walkSpeed; break
+        case LEFT: this.x -= this.walkSpeed; break
+        case DOWN: this.y += this.walkSpeed; break
+        case UP: this.y -= this.walkSpeed; break
       }
     }
 
-    if (axes[NES_Y] > .5) {
-      this.walkDirection = DOWN
-      if (this.checkEmpty(0, this.walkSpeed, true, true)) {
-        this.y += this.walkSpeed
-        isMoving = true
-      }
-    }
+    let isMoving = (action !== IDLE)
+    if (isMoving) this.walkDirection = action
+    this.action = action
 
-    if (axes[NES_Y] < -.5) {
-      this.walkDirection = UP
-      if (this.checkEmpty(0, -this.walkSpeed, true, true)) {
-        this.y -= this.walkSpeed
-        isMoving = true
-      }
+    other = this.collisionRectangle(this.x, this.y, this.x + 32, this.y + 32, 'explosion', false, true)
+    if (other) {
+      this.alive = false
+      this.frameIndex = ANIM.dead
+      return
     }
 
     if (buttons[NES_A]) {
@@ -101,7 +118,7 @@ class Player extends Actor {
         switch (pu.frameIndex) {
           case 0: this.bombPower += 1; break
           case 1: this.maxMana += COOLDOWN; this.curMana += COOLDOWN; break
-          // case 2: this.walkSpeed += 2; break
+          case 2: this.walkSpeed *= 1.5; break
         }
         pu.destroyInstance()
       }
