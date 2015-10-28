@@ -1,11 +1,21 @@
 {
   "sprites": [
-    { "id": "wall", "path": "assets/wall.png", "frames": [[0,0,32,32]] },
-    { "id": "box", "path": "assets/box.png", "frames": [[0,0,32,32]] },
-
+    {
+      "id": "wall",
+      "path": "assets/wall.png",
+      "bbox": [ 0, 0, 32, 32 ],
+      "frames": [[ 0, 0, 32, 32 ]]
+    },
+    {
+      "id": "box",
+      "path": "assets/box.png",
+      "bbox": [ 0, 0, 32, 32 ],
+      "frames": [[ 0, 0, 32, 32 ]]
+    },
     {
       "id": "bomb",
       "path": "assets/bomb.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [   0, 0, 32, 32 ],
         [  32, 0, 32, 32 ],
@@ -14,20 +24,20 @@
         [ 128, 0, 32, 32 ]
       ]
     },
-
     {
       "id": "explosion",
       "path": "assets/explosion.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [ 0,  0, 32, 32 ],
         [ 0, 32, 32, 32 ],
         [ 0, 64, 32, 32 ]
       ]
     },
-
     {
       "id": "explosion-arms",
       "path": "assets/explosion-arms.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [   0, 0, 32, 32 ],
         [  32, 0, 32, 32 ],
@@ -38,20 +48,20 @@
         [ 192, 0, 32, 32 ]
       ]
     },
-
     {
       "id": "powerup",
       "path": "assets/powerup.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [  0, 0, 32, 32 ],
         [ 32, 0, 32, 32 ],
         [ 64, 0, 32, 32 ]
       ]
     },
-
     {
       "id": "grobb",
       "path": "assets/grobb.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [   0, 0, 32, 32 ],
         [  32, 0, 32, 32 ],
@@ -70,10 +80,10 @@
         [ 448, 0, 32, 32 ]
       ]
     },
-
     {
       "id": "gropp",
       "path": "assets/gropp.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [   0, 0, 32, 32 ],
         [  32, 0, 32, 32 ],
@@ -92,10 +102,10 @@
         [ 448, 0, 32, 32 ]
       ]
     },
-
     {
       "id": "groameesh",
       "path": "assets/groameesh.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [   0, 0, 32, 32 ],
         [  32, 0, 32, 32 ],
@@ -114,10 +124,10 @@
         [ 448, 0, 32, 32 ]
       ]
     },
-
     {
       "id": "george",
       "path": "assets/george.png",
+      "bbox": [ 0, 0, 32, 32 ],
       "frames": [
         [   0, 0, 32, 32 ],
         [  32, 0, 32, 32 ],

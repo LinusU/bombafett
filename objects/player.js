@@ -2,6 +2,9 @@
 
 const { Actor, Gamepad } = require('gamox')
 
+const Powerup = require('./powerup')
+const Explosion = require('./explosion')
+
 const NES_X = 3
 const NES_Y = 4
 
@@ -95,13 +98,6 @@ class Player extends Actor {
     if (isMoving) this.walkDirection = action
     this.action = action
 
-    other = this.collisionRectangle(this.x, this.y, this.x + 32, this.y + 32, 'explosion', false, true)
-    if (other) {
-      this.alive = false
-      this.frameIndex = ANIM.dead
-      return
-    }
-
     if (buttons[NES_A]) {
       if (this.curMana >= COOLDOWN) {
         if (this.checkEmpty(0, 0, true, false)) {
@@ -112,22 +108,27 @@ class Player extends Actor {
       }
     }
 
-    if (isMoving) {
-      let pu = this.collisionRectangle(this.x, this.y, this.x + 32, this.y + 32, 'powerup', false, true)
-      if (pu) {
-        switch (pu.frameIndex) {
-          case 0: this.bombPower += 1; break
-          case 1: this.maxMana += COOLDOWN; this.curMana += COOLDOWN; break
-          case 2: this.walkSpeed *= 1.5; break
-        }
-        pu.destroyInstance()
-      }
-    }
-
     const anim = ANIM[(isMoving ? 'walk' : 'stand')][this.walkDirection]
 
     this.frameIndex = anim[Math.floor(this.animCounter) % anim.length]
     this.animCounter += 0.05
+  }
+
+  collisionWith (other) {
+    if (other instanceof Powerup) {
+      switch (other.frameIndex) {
+        case 0: this.bombPower += 1; break
+        case 1: this.maxMana += COOLDOWN; this.curMana += COOLDOWN; break
+        case 2: this.walkSpeed *= 1.5; break
+      }
+
+      other.destroyInstance()
+    }
+
+    if (other instanceof Explosion) {
+      this.alive = false
+      this.frameIndex = ANIM.dead
+    }
   }
 }
 
