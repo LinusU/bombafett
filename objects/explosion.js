@@ -49,6 +49,11 @@ class Explosion extends Actor {
       other.explosionType = 'origin'
 
       const addExpl = (dx, dy, explosionType, power) => {
+        other = this.collisionRectangle(x + dx, y + dy, x + dx + 32, y + dy + 32, 'powerup', false, true)
+        if (other) {
+          other.destroyInstance()
+        }
+
         other = this.collisionRectangle(x + dx, y + dy, x + dx + 32, y + dy + 32, 'box', false, true)
         if (other) {
           other.destroyInstance()
