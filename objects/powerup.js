@@ -10,6 +10,8 @@ class Powerup extends Actor {
 
     this.frameIndex = Math.floor(Math.random() * 3)
   }
+
+  toString() { return '[Actor Powerup]' }
 }
 
 module.exports = Powerup

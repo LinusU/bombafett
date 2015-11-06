@@ -52,6 +52,8 @@ class Player extends Actor {
     this.target = [this.x, this.y]
   }
 
+  toString() { return '[Actor Player]' }
+
   step () {
     if (!this.alive) return
 

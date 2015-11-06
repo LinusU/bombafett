@@ -35,6 +35,8 @@ class Controller extends Actor {
       }
     }
   }
+
+  toString() { return '[Actor Controller]' }
 }
 
 module.exports = Controller

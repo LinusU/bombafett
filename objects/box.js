@@ -8,6 +8,8 @@ class Box extends Actor {
     this.solid = true
   }
 
+  toString() { return '[Actor Box]' }
+
   destroy () {
     if (Math.random() < .2) {
       this.createInstance('powerup', 0, 0, true)

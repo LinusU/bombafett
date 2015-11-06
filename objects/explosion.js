@@ -11,6 +11,8 @@ class Explosion extends Actor {
     this.setupDone = false
   }
 
+  toString() { return '[Actor Explosion]' }
+
   step () {
     if (this.setupDone === false) {
       this.setupDone = true

@@ -14,6 +14,8 @@ class Bomb extends Actor {
     this.ttl = 90
   }
 
+  toString() { return '[Actor Bomb]' }
+
   step () {
     if (this.ttl === 0) this.destroyInstance()
 
