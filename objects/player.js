@@ -17,6 +17,9 @@ const DOWN = 2
 const UP = 3
 const IDLE = 4
 
+const SPEED_NORMAL = 120 / 60
+const SPEED_INC = 14 / 60
+
 const COOLDOWN = 90
 const SPRITES = ['grobb', 'gropp', 'groameesh', 'george']
 const ANIM = {
@@ -40,7 +43,7 @@ class Player extends Actor {
     this.animCounter = 0
 
     this.bombPower = 1
-    this.walkSpeed = 2
+    this.walkSpeed = SPEED_NORMAL
 
     this.maxMana = COOLDOWN
     this.curMana = COOLDOWN
@@ -121,7 +124,7 @@ class Player extends Actor {
       switch (other.frameIndex) {
         case 0: this.bombPower += 1; break
         case 1: this.maxMana += COOLDOWN; this.curMana += COOLDOWN; break
-        case 2: this.walkSpeed *= 1.5; break
+        case 2: this.walkSpeed += SPEED_INC; break
       }
 
       other.destroyInstance()
