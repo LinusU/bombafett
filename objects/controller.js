@@ -16,6 +16,8 @@ class Controller extends Actor {
 
       if (x === 32 && y === 32) return 'player'
       if (x === 32 && y === roomWidth - 64) return 'player'
+      if (x === roomHeight - 64 && y === 32) return 'player'
+      if (x === roomHeight - 64 && y === roomWidth - 64) return 'player'
 
       if (x < 96 && y < 96) return null
       if (x >= roomWidth - 96 && y < 96) return null
