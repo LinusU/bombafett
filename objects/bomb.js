@@ -10,16 +10,12 @@ class Bomb extends Actor {
 
     this.x = Math.round(this.x / 32) * 32
     this.y = Math.round(this.y / 32) * 32
-
-    this.ttl = 90
   }
 
   toString() { return '[Actor Bomb]' }
 
-  step () {
-    if (this.ttl === 0) this.destroyInstance()
-
-    this.ttl--
+  animationEnd () {
+    this.destroyInstance()
   }
 
   destroy () {
